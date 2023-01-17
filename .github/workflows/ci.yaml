@@ -10,6 +10,8 @@ jobs:
     name: "Build on Arch Linux"
     runs-on: ubuntu-latest
     container: archlinux:base-devel
+    permissions:
+          contents: write
     steps:
       - name: Checkout PKGBUILDs
         uses: actions/checkout@v3
