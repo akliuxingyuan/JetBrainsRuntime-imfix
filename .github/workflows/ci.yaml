@@ -13,18 +13,18 @@ jobs:
 
       - name: Install jcef
         run: |
-          cd ${{ env.GITHUB_WORKSPACE }}/jcef-jetbrains-git
+          cd $GITHUB_WORKSPACE/jcef-jetbrains-git
           makepkg -sif --noconfirm
 
       - name: Build v11
         run: |
-          cd ${{ env.GITHUB_WORKSPACE }}/java11-jetbrains-imfix
+          cd $GITHUB_WORKSPACE/java11-jetbrains-imfix
           makepkg -sf --noconfirm
           echo "v11=$(makepkg --printsrcinfo | grep -P -o '(?<=pkgver = ).+$')" >> $GITHUB_ENV
 
       - name: Build v17
         run: |
-          cd ${{ env.GITHUB_WORKSPACE }}/java17-jetbrains-imfix
+          cd $GITHUB_WORKSPACE/java17-jetbrains-imfix
           makepkg -sf --noconfirm
           echo "v17=$(makepkg --printsrcinfo | grep -P -o '(?<=pkgver = ).+$')" >> $GITHUB_ENV
 
