@@ -11,9 +11,13 @@ jobs:
       - name: Checkout PKGBUILDs
         uses: actions/checkout@v3
 
-      - name: hack makepkg
+      - name: Hack makepkg
         run: |
           sed -i '/E_ROOT/d' /usr/bin/makepkg
+
+      - name: Update database
+        run: |
+          pacman --noconfirm --noprogressbar -Sy
 
       - name: Install jcef
         run: |
