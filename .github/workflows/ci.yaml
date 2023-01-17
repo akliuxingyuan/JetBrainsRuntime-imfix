@@ -11,6 +11,10 @@ jobs:
       - name: Checkout PKGBUILDs
         uses: actions/checkout@v3
 
+      - name: hack makepkg
+        run: |
+          sed -i '/E_ROOT/d' /usr/bin/makepkg
+
       - name: Install jcef
         run: |
           cd $GITHUB_WORKSPACE/jcef-jetbrains-git
