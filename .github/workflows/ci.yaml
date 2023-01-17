@@ -43,7 +43,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           artifacts: |
-            $GITHUB_WORKSPACE/java11-jetbrains-imfix/*.tar.zst
-            $GITHUB_WORKSPACE/java17-jetbrains-imfix/*.tar.zst
+            ${{ github.workspace }}/java11-jetbrains-imfix/*.tar.zst
+            ${{ github.workspace }}/java17-jetbrains-imfix/*.tar.zst
           name: ${{ env.v11 }}, ${{ env.v17 }}
           token: ${{ secrets.GITHUB_TOKEN }}
