@@ -1,0 +1,36 @@
+name: CI
+
+on: [push]
+
+jobs:
+  makepkg:
+    name: "Build on Arch Linux"
+    runs-on: ubuntu-latest
+    container: archlinux:base-devel
+    steps:
+      - name: Checkout PKGBUILDs
+        uses: actions/checkout@v3
+
+      - name: Install jcef
+        run: |
+          cd ${{ env.GITHUB_WORKSPACE }}/jcef-jetbrains-git
+          makepkg -sif --noconfirm
+
+      - name: Build v11
+        run: |
+          cd ${{ env.GITHUB_WORKSPACE }}/java11-jetbrains-imfix
+          makepkg -sf --noconfirm
+          echo "v11=$(makepkg --printsrcinfo | grep -P -o '(?<=pkgver = ).+$')" >> $GITHUB_ENV
+
+      - name: Build v17
+        run: |
+          cd ${{ env.GITHUB_WORKSPACE }}/java17-jetbrains-imfix
+          makepkg -sf --noconfirm
+          echo "v17=$(makepkg --printsrcinfo | grep -P -o '(?<=pkgver = ).+$')" >> $GITHUB_ENV
+
+      - name: Create Release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "java11-jetbrains-imfix/*.tar.zst,java17-jetbrains-imfix/*.tar.zst"
+          name: ${{ env.v11 }}, ${{ env.v17 }}
+          token: ${{ secrets.GITHUB_TOKEN }}
