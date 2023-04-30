@@ -1,0 +1,25 @@
+diff --git a/jb/tools/linux/create_bundle.sh b/jb/tools/linux/create_bundle.sh
+index b123d5b..7027f2f 100755
+--- a/jb/tools/linux/create_bundle.sh
++++ b/jb/tools/linux/create_bundle.sh
+@@ -43,6 +43,6 @@ echo "*** create archive..."
+ tar -cvzf "$ARTIFACT.tar.gz" -C "$ARTIFACT" $(ls "$ARTIFACT")
+ rm -rf "$ARTIFACT"
+ ls -lah "$ARTIFACT.tar.gz"
+-cp "$OUT_CLS_DIR"/jcef-tests.jar .
++# cp "$OUT_CLS_DIR"/jcef-tests.jar .
+ 
+ echo "*** SUCCESSFUL"
+diff --git a/tools/compile.sh b/tools/compile.sh
+index 10f863d..dc9c543 100755
+--- a/tools/compile.sh
++++ b/tools/compile.sh
+@@ -23,7 +23,7 @@ else
+ 
+   #$JAVA_HOME/bin/javac -Xdiags:verbose -cp "$CLS_PATH" -d "$OUT_PATH" "${JAVA_PATH}"/tests/detailed/*.java "${JAVA_PATH}"/tests/junittests/*.java "${JAVA_PATH}"/tests/simple/*.java "${JAVA_PATH}"/org/cef/*.java "${JAVA_PATH}"/org/cef/browser/*.java "${JAVA_PATH}"/org/cef/callback/*.java "${JAVA_PATH}"/org/cef/handler/*.java "${JAVA_PATH}"/org/cef/misc/*.java "${JAVA_PATH}"/org/cef/network/*.java
+   cd "$DIR"
+-  ant -v jar tests-jar
++  ant -v jar
+ 
+   # Copy MANIFEST.MF
+   if which rsync &>/dev/null; then
