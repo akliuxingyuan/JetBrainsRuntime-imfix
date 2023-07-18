@@ -23,6 +23,7 @@ jobs:
       - name: Update database
         run: |
           pacman --noconfirm --noprogressbar -Sy
+          archlinux-java set java-17-openjdk
 
       - name: Install jcef
         run: |
