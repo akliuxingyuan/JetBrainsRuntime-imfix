@@ -6,7 +6,7 @@ arch=('x86_64')
 url="https://github.com/JetBrains/jcef"
 license=('BSD')
 depends=('java-runtime' 'libxcursor' 'at-spi2-atk' 'libxkbcommon' 'libxcomposite' 'mesa' 'libcups' 'pango' 'libxrandr' 'alsa-lib' 'nss')
-makedepends=('java-environment=17' 'cmake' 'git' 'ninja' 'python' 'ant' 'unzip')
+makedepends=('java-environment=17' 'cmake' 'git' 'ninja' 'python' 'ant' 'unzip' 'zip')
 source=("git+$url.git#branch=dev" "local://skip_test.patch")
 sha256sums=('SKIP' '146722b26328ca1bb9b2637a9ce34385a116fe403f2c19e821a735427c407144')
 provides=('jcef-jetbrains')
