@@ -75,6 +75,35 @@ build() {
     cp -R .tmp_extract_jar/natives/linux-amd64/* lib
     $JAVA_HOME/bin/jmod create --module-path . --class-path jogl-all.jar --libs lib jogl.all.jmod
     rm -rf .tmp_extract_jar jogl-all.jar lib
+    
+
+    # slf4j
+    SLF_JAR=slf4j-api-2.0.0.jar
+    cp ../third_party/slf4j/$SLF_JAR .
+    cp ../jb/tools/common/slf4j-module-info.java module-info.java
+    "$JAVA_HOME"/bin/javac --patch-module org.slf4j=$SLF_JAR module-info.java
+    
+    export TMP_DIR="tmp_jar_content"
+    mkdir $TMP_DIR
+    cd $TMP_DIR
+    jar -xvf ../$SLF_JAR
+    rm -rf ./META-INF/versions
+    cp ../module-info.class .
+    jar -cvf ../slf4j.jar .
+    cd ..
+    rm -rf module-info.class module-info.java $TMP_DIR
+    "$JAVA_HOME"/bin/jmod create --class-path slf4j.jar org.slf4j.jmod
+    rm -rf "$SLF_JAR" slf4j.jar
+    
+    # thrift
+    THRIFT_JAR=libthrift-0.16.0.jar
+    cp ../third_party/thrift/$THRIFT_JAR .
+    cp ../jb/tools/common/thrift-module-info.java module-info.java
+    "$JAVA_HOME"/bin/javac --patch-module org.apache.thrift=$THRIFT_JAR module-info.java
+    "$JAVA_HOME"/bin/jar uf $THRIFT_JAR module-info.class
+    rm module-info.class module-info.java
+    "$JAVA_HOME"/bin/jmod create --class-path $THRIFT_JAR org.apache.thrift.jmod
+    rm -rf "$THRIFT_JAR"
 
     # jcef
     cp ../out/linux64/jcef.jar .
