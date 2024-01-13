@@ -1,6 +1,6 @@
 pkgname=jcef-jetbrains-git
 pkgdesc="A simple framework for embedding Chromium-based browsers into Java-based applications. (Used for JetBrainsRuntime)"
-pkgver=111.2.1.api1.12.r0.57ca963
+pkgver=119.4.3.api1.13.r8.d425674
 pkgrel=1
 arch=('x86_64')
 url="https://github.com/JetBrains/jcef"
@@ -75,43 +75,42 @@ build() {
     cp -R .tmp_extract_jar/natives/linux-amd64/* lib
     $JAVA_HOME/bin/jmod create --module-path . --class-path jogl-all.jar --libs lib jogl.all.jmod
     rm -rf .tmp_extract_jar jogl-all.jar lib
-    
 
     # slf4j
     SLF_JAR=slf4j-api-2.0.0.jar
     cp ../third_party/slf4j/$SLF_JAR .
     cp ../jb/tools/common/slf4j-module-info.java module-info.java
-    "$JAVA_HOME"/bin/javac --patch-module org.slf4j=$SLF_JAR module-info.java
-    
-    export TMP_DIR="tmp_jar_content"
-    mkdir $TMP_DIR
-    cd $TMP_DIR
-    jar -xvf ../$SLF_JAR
+    $JAVA_HOME/bin/javac --patch-module org.slf4j=$SLF_JAR module-info.java
+    mkdir tmp_jar_content && cd tmp_jar_content
+    $JAVA_HOME/bin/jar -xvf ../$SLF_JAR
     rm -rf ./META-INF/versions
     cp ../module-info.class .
     jar -cvf ../slf4j.jar .
     cd ..
-    rm -rf module-info.class module-info.java $TMP_DIR
-    "$JAVA_HOME"/bin/jmod create --class-path slf4j.jar org.slf4j.jmod
-    rm -rf "$SLF_JAR" slf4j.jar
-    
+    rm -rf module-info.class module-info.java tmp_jar_content
+    $JAVA_HOME/bin/jmod create --class-path slf4j.jar org.slf4j.jmod
+    rm -rf $SLF_JAR slf4j.jar
+
     # thrift
     THRIFT_JAR=libthrift-0.16.0.jar
     cp ../third_party/thrift/$THRIFT_JAR .
     cp ../jb/tools/common/thrift-module-info.java module-info.java
-    "$JAVA_HOME"/bin/javac --patch-module org.apache.thrift=$THRIFT_JAR module-info.java
-    "$JAVA_HOME"/bin/jar uf $THRIFT_JAR module-info.class
+    $JAVA_HOME/bin/javac --patch-module org.apache.thrift=$THRIFT_JAR module-info.java
+    $JAVA_HOME/bin/jar uf $THRIFT_JAR module-info.class
     rm module-info.class module-info.java
-    "$JAVA_HOME"/bin/jmod create --class-path $THRIFT_JAR org.apache.thrift.jmod
+    $JAVA_HOME/bin/jmod create --class-path $THRIFT_JAR org.apache.thrift.jmod
     rm -rf "$THRIFT_JAR"
 
     # jcef
     cp ../out/linux64/jcef.jar .
     mkdir lib
     cp -R ../jcef_build/native/Release/* lib
+    cp -R ../jcef_build/remote/Release/libshared_mem_helper.so lib
+    cp -R ../jcef_build/remote/Release/cef_server lib
     find lib -name "*.so" | xargs strip -x
     strip -x lib/chrome-sandbox
     strip -x lib/jcef_helper
+    strip -x lib/cef_server
     $JAVA_HOME/bin/jmod create --module-path . --class-path jcef.jar --libs lib jcef.jmod
     rm -rf jcef.jar lib
 
